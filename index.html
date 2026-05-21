@@ -1,14 +1,259 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The New York Times - Mobile</title>
+<!-- Tailwind CSS CDN with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts for Libre Caslon Text -->
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&amp;family=Playfair+Display:wght@700;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols for Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['''Libre Caslon Text''', '''serif'''],
+            nyt: ['''Playfair Display''', '''serif'''], // Used for the iconic masthead feel
+          },
+          colors: {
+            '''background''': '''#ffffff''',
+            '''primary''': '''#000000''',
+            '''secondary''': '''#666666''',
+            '''border-subtle''': '''#ebebeb''',
+            '''surface-container''': '''#f9f9f9''',
+            '''accent-red''': '''#d43f33''',
+          },
+          spacing: {
+            '''margin-mobile''': '''1rem''',
+            '''stack-base''': '''0.75rem''',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="typography">
+    .nyt-masthead {
+      font-family: '''Playfair Display''', serif;
+      letter-spacing: -0.05em;
+      font-weight: 900;
+      font-size: 1.85rem;
+    }
+    .headline-serif {
+      font-family: '''Libre Caslon Text''', serif;
+      line-height: 1.15;
+    }
+    .summary-text {
+      font-family: '''Libre Caslon Text''', serif;
+      line-height: 1.4;
+      color: #333333;
+    }
+    .label-caps {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+  </style>
+<style data-purpose="animations">
+    .drawer-transition {
+      transition: transform 0.3s ease-in-out;
+    }
+    .overlay-transition {
+      transition: opacity 0.3s ease-in-out;
+    }
+    .nav-active {
+      opacity: 0.7;
+    }
+    chat-bot {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      z-index: 100;
+    }
+  </style>
   <link href='/style.css' rel='stylesheet'>
-</head>
-<body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
   <script defer type="text/javascript" src="/main.js"></script>
-</body>
-</html>
+</head>
+<body class="bg-background text-primary font-serif selection:bg-gray-200">
+<chat-bot></chat-bot>
+<!-- BEGIN: Navigation Drawer Overlay -->
+<div class="fixed inset-0 bg-black/40 z-[60] opacity-0 pointer-events-none overlay-transition" id="drawer-overlay" onclick="toggleDrawer()"></div>
+<!-- END: Navigation Drawer Overlay -->
+<!-- BEGIN: NavigationDrawer -->
+<aside class="fixed top-0 left-0 h-full w-80 max-w-[80vw] bg-background z-[70] -translate-x-full drawer-transition border-r border-border-subtle shadow-xl overflow-y-auto" id="nav-drawer">
+<div class="p-4 border-b border-border-subtle flex justify-between items-center">
+<h2 class="font-bold text-xl uppercase tracking-widest text-sm">Sections</h2>
+<button class="p-2" onclick="toggleDrawer()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<nav class="flex flex-col">
+<a class="px-6 py-4 border-b border-border-subtle flex items-center gap-4 hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary">public</span> World
+      </a>
+<a class="px-6 py-4 border-b border-border-subtle flex items-center gap-4 hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary">flag</span> U.S.
+      </a>
+<a class="px-6 py-4 border-b border-border-subtle flex items-center gap-4 hover:bg-surface-container transition-colors bg-surface-container font-bold" href="#">
+<span class="material-symbols-outlined text-primary">gavel</span> Politics
+      </a>
+<a class="px-6 py-4 border-b border-border-subtle flex items-center gap-4 hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary">trending_up</span> Business
+      </a>
+<a class="px-6 py-4 border-b border-border-subtle flex items-center gap-4 hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary">terminal</span> Technology
+      </a>
+<a class="px-6 py-4 border-b border-border-subtle flex items-center gap-4 hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary">science</span> Science
+      </a>
+<a class="px-6 py-4 border-b border-border-subtle flex items-center gap-4 hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary">medical_services</span> Health
+      </a>
+<a class="px-6 py-4 border-b border-border-subtle flex items-center gap-4 hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined text-secondary">palette</span> Style
+      </a>
+</nav>
+</aside>
+<!-- END: NavigationDrawer -->
+<!-- BEGIN: TopAppBar -->
+<header class="sticky top-0 z-50 bg-background border-b border-border-subtle" data-purpose="main-header">
+<div class="flex justify-between items-center w-full px-margin-mobile py-2">
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-colors active:opacity-70" data-purpose="menu-toggle" onclick="toggleDrawer()">
+<span class="material-symbols-outlined text-2xl">menu</span>
+</button>
+<div class="nyt-masthead py-1" data-purpose="brand-logo">
+        The New York Times
+      </div>
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-colors active:opacity-70" data-purpose="user-profile">
+<span class="material-symbols-outlined text-2xl">person</span>
+</button>
+</div>
+<!-- Secondary Header Bar: Date & Info -->
+<div class="px-margin-mobile pb-2 flex justify-between items-center border-b border-border-subtle/50">
+<div class="label-caps text-secondary">Wednesday, May 22, 2024</div>
+<div class="flex items-center gap-2">
+<button class="bg-black text-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-sm hover:bg-gray-800 transition-colors">
+          Subscribe for $1/week
+        </button>
+</div>
+</div>
+</header>
+<!-- END: TopAppBar -->
+<!-- BEGIN: BreakingNewsBar -->
+<div class="bg-white px-margin-mobile py-2 border-b border-border-subtle flex items-center gap-2 overflow-x-auto whitespace-nowrap no-scrollbar">
+<span class="text-accent-red font-bold text-[10px] uppercase tracking-tighter">Live</span>
+<div class="h-3 w-px bg-gray-300"></div>
+<a class="text-[11px] font-bold hover:underline" href="#">Trump Administration</a>
+<span class="text-[10px] text-secondary">4m ago</span>
+<div class="h-3 w-px bg-gray-300 mx-1"></div>
+<a class="text-[11px] font-bold hover:underline" href="#">N.B.A. Western Finals</a>
+</div>
+<!-- END: BreakingNewsBar -->
+<main class="pb-24">
+<!-- BEGIN: TopStory -->
+<article class="px-margin-mobile pt-6 pb-8 border-b border-border-subtle" data-purpose="hero-article">
+<header class="mb-4">
+<h1 class="headline-serif text-3xl font-bold mb-3 tracking-tight">
+          Trump’s $1.8 Billion Fund Appears to Violate Administration’s Own Policies
+        </h1>
+<p class="summary-text text-lg text-gray-700">
+          The fund that could offer payments to Trump aides seems to contradict a policy instituted under former Attorney General Pam Bondi last year, legal experts said.
+        </p>
+<div class="mt-2 text-[11px] text-secondary font-bold uppercase tracking-tighter">4 min read</div>
+</header>
+<figure class="mt-4">
+<img alt="Top Story Hero" class="w-full h-auto object-cover border border-gray-100" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+<figcaption class="mt-2 text-[11px] text-secondary leading-tight">
+          Former President Donald J. Trump with Attorney General Pam Bondi at the White House last October.
+        </figcaption>
+</figure>
+</article>
+<!-- END: TopStory -->
+<!-- BEGIN: SecondaryStoriesList -->
+<section class="px-margin-mobile divide-y divide-border-subtle" data-purpose="latest-news-list">
+<!-- Story Item 1 -->
+<article class="py-6 flex gap-4">
+<div class="flex-1">
+<h2 class="headline-serif text-xl font-bold leading-tight mb-2">
+            Why the U.S. Economy Is Growing Faster Than Other Rich Nations
+          </h2>
+<p class="summary-text text-sm line-clamp-3">
+            Productivity is up and government spending remains high, keeping the American expansion on track.
+          </p>
+</div>
+<div class="w-24 h-24 flex-shrink-0 bg-gray-100">
+<img alt="Economy" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdXG5FdYwpGURxabToblYivAj1-avLO8LFwrQ0B5X8W0Zovi-073LvNHOY0oJu5LR-2gJ-iHWacGsINz5iHj9ziWzi_s-wc4_Ui6rLj6TAZhmGUw7O6moYeKjTMScSAzMup2aBd8CWyqfCTTx3kLHqj6AVpF8Gx3uAoBsZe_RDEYvinZwmr9-y70NtB_l_3Vc8jNViyUQCXQgyCYRc_Ui7DYg6QZou0tQq-yFS8C94p2Thl__tQSpVId7fKD1q1-_tXPmqjdEuGTg"/>
+</div>
+</article>
+<!-- Story Item 2 -->
+<article class="py-6 flex gap-4">
+<div class="flex-1">
+<h2 class="headline-serif text-xl font-bold leading-tight mb-2">
+            Israel-Hamas War: Fresh Protests Erupt as Humanitarian Aid Stalls
+          </h2>
+<p class="summary-text text-sm line-clamp-3">
+            U.N. officials warned of an "all-out famine" as crossing points remain contested.
+          </p>
+</div>
+<div class="w-24 h-24 flex-shrink-0 bg-gray-100">
+<img alt="Conflict" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSyIgbxwQgpdHHNGo_v145IN54LzHh1bPrMW_ZczI2NwwocbyJr3Rc04IunOrYE_D-3kXgMEILBCDEhbw8jNbOofCNkyjVQlm3qCRG3w3tJ_T4RVMUaO0H_Nb8ojpzh1vkHqgRGP1uf4MAF4LYo5vEAVSnUCMTbx5LJ7etGgjmDVUWEEeIcIulI11JR8yTCu_D7j2HVLZjrbhFpJYI7tnxyyfTCqwr7PXuFS5T91y-DVYaROU8fcO0bnYgsUe4Pyt-EcOQeUaeTvQ"/>
+</div>
+</article>
+<!-- Story Item 3 -->
+<article class="py-6">
+<div class="mb-3">
+<span class="label-caps text-accent-red">Climate</span>
+</div>
+<h2 class="headline-serif text-2xl font-bold leading-tight mb-2">
+          Hottest Summer on Record Predicted for Most of Northern Hemisphere
+        </h2>
+<p class="summary-text text-base">
+          Forecasters say the combination of climate change and lingering El Niño effects will likely smash previous temperature records.
+        </p>
+</article>
+</section>
+<!-- END: SecondaryStoriesList -->
+</main>
+<!-- BEGIN: BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-background border-t border-border-subtle h-16 flex justify-around items-center px-4" data-purpose="bottom-navigation">
+<button class="flex flex-col items-center justify-center text-primary font-bold active:scale-95 transition-transform">
+<span class="material-symbols-outlined">home</span>
+<span class="label-caps mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary hover:text-primary active:scale-95 transition-transform" onclick="toggleDrawer()">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="label-caps mt-1">Sections</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary hover:text-primary active:scale-95 transition-transform">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="label-caps mt-1">For You</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary hover:text-primary active:scale-95 transition-transform">
+<span class="material-symbols-outlined">search</span>
+<span class="label-caps mt-1">Search</span>
+</button>
+</nav>
+<!-- END: BottomNavBar -->
+<script data-purpose="ui-handlers">
+    function toggleDrawer() {
+      const drawer = document.getElementById('''nav-drawer''');
+      const overlay = document.getElementById('''drawer-overlay''');
+      const isClosed = drawer.classList.contains('''-translate-x-full''');
+      
+      if (isClosed) {
+        drawer.classList.remove('''-translate-x-full''');
+        overlay.classList.remove('''opacity-0''', '''pointer-events-none''');
+        overlay.classList.add('''opacity-100''', '''pointer-events-auto''');
+        document.body.classList.add('''overflow-hidden''');
+      } else {
+        drawer.classList.add('''-translate-x-full''');
+        overlay.classList.add('''opacity-0''', '''pointer-events-none''');
+        overlay.classList.remove('''opacity-100''', '''pointer-events-auto''');
+        document.body.classList.remove('''overflow-hidden''');
+      }
+    }
+  </script>
+</body></html>
